@@ -1,13 +1,17 @@
 <template>
   <h3>History</h3>
-  <ul id="list" class="list">
+  <ul id="list" class="list" data-cy="transaction">
     <li
       v-for="transaction in transactions"
       :key="transaction.id"
       :class="transaction.amount < 0 ? 'minus' : 'plus'"
     >
       {{ transaction.text }} <span>${{ transaction.amount }}</span
-      ><button class="delete-btn" @click="deleteTransaction(transaction.id)">
+      ><button
+        class="delete-btn"
+        :id="`delete-btn`"
+        @click="deleteTransaction(transaction.id)"
+      >
         x
       </button>
     </li>
@@ -15,7 +19,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps } from "vue";
 
 const props = defineProps({
   transactions: {
@@ -24,9 +28,9 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['transactionDeleted']);
+const emit = defineEmits(["transactionDeleted"]);
 
 const deleteTransaction = (id) => {
-  emit('transactionDeleted', id);
+  emit("transactionDeleted", id);
 };
 </script>
