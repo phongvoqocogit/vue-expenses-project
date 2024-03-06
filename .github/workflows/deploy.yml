@@ -31,6 +31,3 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@4.5.0
         with:
           folder: dist
-
-permissions:
-  contents: write
