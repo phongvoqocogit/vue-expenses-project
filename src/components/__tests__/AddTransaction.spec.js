@@ -9,8 +9,8 @@ test("renders the component", () => {
 
 test('emits "transactionSubmitted" event with correct payload when form is submitted', async () => {
   const wrapper = mount(AddTransaction);
-  const textInput = wrapper.find("#text");
-  const amountInput = wrapper.find("#amount");
+  const textInput = wrapper.find("#transaction-text");
+  const amountInput = wrapper.find("#transaction-amount");
 
   await textInput.setValue("Test Transaction");
   await amountInput.setValue("100");

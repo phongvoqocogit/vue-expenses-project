@@ -1,21 +1,13 @@
 <template>
   <Header id="header" />
   <div class="container">
-    <Balance :total="total" id="balance" />
-    <IncomeExpenses
-      :income="+income"
-      :expenses="+expenses"
-      id="income-expenses"
-    />
+    <Balance :total="total" />
+    <IncomeExpenses :income="+income" :expenses="+expenses" />
     <TransactionList
       :transactions="transactions"
       @transactionDeleted="handleTransactionDeleted"
-      id="transaction-list"
     />
-    <AddTransaction
-      @transactionSubmitted="handleTransactionSubmitted"
-      id="add-transaction"
-    />
+    <AddTransaction @transactionSubmitted="handleTransactionSubmitted" />
   </div>
 </template>
 

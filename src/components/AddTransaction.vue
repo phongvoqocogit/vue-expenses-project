@@ -5,7 +5,7 @@
       <label for="transaction-text">Text</label>
       <input
         type="text"
-        id="transaction-text"
+        :id="`transaction-text`"
         placeholder="Enter text..."
         v-model="text"
       />
@@ -17,7 +17,7 @@
       >
       <input
         type="text"
-        id="transaction-amount"
+        :id="`transaction-amount`"
         placeholder="Enter amount..."
         v-model="amount"
       />
