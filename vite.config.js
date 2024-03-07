@@ -11,5 +11,8 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  base: process.env.NODE_ENV === "production" ? "/vue-expenses-project/" : "/",
+  base:
+    process.env.DEPLOY_GITHUB_PAGE === "GITHUB_PAGE"
+      ? "/vue-expenses-project/"
+      : "/",
 });
