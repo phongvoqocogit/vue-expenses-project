@@ -1,26 +1,30 @@
-# Use the official Node.js image as the base image
-FROM node:16
 
-# Set the working directory in the Docker container
+# Use the node image from official Docker Hub
+FROM node:16.10.0-alpine3.13 as build-stage
+
+# set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy the working directory in the container
 COPY package*.json ./
 
-# Install the project dependencies
-RUN npm install
+# Install the project dependecies
+RUN npm install 
 
-# Copy the rest of the project files to the working directory
+# Copy the rest of the project files to the container
 COPY . .
 
-# Build the project
+#Build the Vue.js application to the production mode to dist folder
+# here also if you use npm then npm run build
 RUN npm run build
 
-# Expose port 5000 for the application
-EXPOSE 3417
+# use the lighweight Nignx image from the previus state to the nginx container
+FROM nginx:stable-alpine as production-stage
 
-# Install serve to serve the built files
-RUN npm install -g serve
+# Copy the build application from the previos state to the Nginx container
+# her we can see the path of the build application and the path where we want to copy it
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-# Serve the built files
-CMD ["serve", "-s", "dist", "-l", "5000"]
+# Copy the nginx configuration file
+# here should be the same name as the nginx configuration file in the project
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf

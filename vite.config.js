@@ -14,5 +14,5 @@ export default defineConfig({
   base:
     process.env.DEPLOY_GITHUB_PAGE === "GITHUB_PAGE"
       ? "/vue-expenses-project/"
-      : "/",
+      : "",
 });

@@ -1,11 +1,22 @@
 version: "3.8"
+
 services:
   app:
+    container_name: vue-app
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - .:/app
     ports:
-      - 3417:3417
-    command: npm run serve
+      - "8080:80"
+
+  nginx:
+    container_name: nginx-app
+    image: nginx:alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - app
