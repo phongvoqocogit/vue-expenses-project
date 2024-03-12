@@ -1,3 +1,3 @@
 <template>
-  <h2>Expense Tracker 123</h2>
+  <h2>Expense Tracker</h2>
 </template>
