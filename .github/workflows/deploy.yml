@@ -54,5 +54,15 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project
 
+      - name: Deploy to EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project
+            docker run -d -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project
+
       - name: Verify
         run: echo ${{ steps.docker_build.outputs.digest }}
