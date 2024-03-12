@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import App from "@/App.vue";
+import HomePage from "@/pages/HomePage.vue";
 import { nextTick } from "vue";
 import { expect, test } from "vitest";
 
@@ -22,7 +22,7 @@ const localStorageMock = (function () {
 Object.defineProperty(window, "localStorage", { value: localStorageMock });
 
 test("renders the component", () => {
-  const wrapper = mount(App);
+  const wrapper = mount(HomePage);
   expect(wrapper.exists()).toBe(true);
 });
 
@@ -33,7 +33,7 @@ test("displays the correct total balance, income, and expenses", async () => {
   ];
   localStorage.setItem("transactions", JSON.stringify(transactions));
 
-  const wrapper = mount(App);
+  const wrapper = mount(HomePage);
 
   // Wait for next DOM update cycle
   await nextTick();
@@ -54,7 +54,7 @@ test("displays the correct total balance, income, and expenses", async () => {
 });
 
 test("adds a new transaction correctly", async () => {
-  const wrapper = mount(App);
+  const wrapper = mount(HomePage);
 
   const addTransactionComponent = wrapper.findComponent({
     name: "AddTransaction",
