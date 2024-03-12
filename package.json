@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "vue": "^3.4.15",
+    "vue-router": "^4.0.13",
     "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
@@ -22,9 +23,9 @@
     "@vue/test-utils": "^2.4.4",
     "cypress": "^13.6.3",
     "jsdom": "^24.0.0",
+    "serve": "^13.0.0",
     "start-server-and-test": "^2.0.3",
     "vite": "^5.0.11",
-    "vitest": "^1.2.2",
-    "serve": "^13.0.0"
+    "vitest": "^1.2.2"
   }
 }
