@@ -10,5 +10,5 @@ test("renders the component", () => {
 test("displays the correct header text", () => {
   const wrapper = mount(Header);
   const headerElement = wrapper.find("h2");
-  expect(headerElement.text()).toBe("Expense Tracker version 1");
+  expect(headerElement.text()).toBe("Expense Tracker version 2");
 });
