@@ -170,5 +170,9 @@ input[type="number"] {
 .link-container {
   height: fit-content;
   position: fixed;
-  top: 3rem;
+  top: 1rem;
+}
+
+h2 {
+  margin-top: 5rem;
 }

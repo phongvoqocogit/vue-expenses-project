@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - master
+      - group-1/instance-2
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -52,7 +52,8 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${GITHUB_REF##*/}
+          build-args: VUE_APP_GIT_BRANCH=${GITHUB_REF##*/}
 
       - name: Deploy to EC2 instance
         uses: appleboy/ssh-action@master
@@ -63,8 +64,8 @@ jobs:
           script: |
             docker stop vue-expenses-project || true
             docker rm vue-expenses-project || true
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project
-            docker run -d --name vue-expenses-project -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${GITHUB_REF##*/}
+            docker run -d --name vue-expenses-project -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${GITHUB_REF##*/}
 
       - name: Verify
         run: echo ${{ steps.docker_build.outputs.digest }}

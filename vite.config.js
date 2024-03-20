@@ -15,4 +15,7 @@ export default defineConfig({
     process.env.DEPLOY_GITHUB_PAGE === "GITHUB_PAGE"
       ? "/vue-expenses-project/"
       : "",
+  publicRuntimeConfig: {
+    gitBranch: process.env.VUE_APP_GIT_BRANCH,
+  },
 });

@@ -14,6 +14,9 @@ RUN npm install
 # Copy the rest of the project files to the container
 COPY . .
 
+ARG VUE_APP_GIT_BRANCH
+ENV VUE_APP_GIT_BRANCH=$VUE_APP_GIT_BRANCH
+
 #Build the Vue.js application to the production mode to dist folder
 # here also if you use npm then npm run build
 RUN npm run build

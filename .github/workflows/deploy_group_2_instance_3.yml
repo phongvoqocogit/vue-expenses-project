@@ -1,0 +1,70 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - group-2/instance-3
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      DEPLOY_GITHUB_PAGE: GITHUB_PAGE
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test
+        run: npm run test:unit
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          folder: dist
+          branch: deploy-gh-pages
+
+      - name: Login Docker GitHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        id: docker_build
+        with:
+          context: ./
+          file: ./Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${GITHUB_REF##*/}
+
+      - name: Deploy to EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            docker stop vue-expenses-project || true
+            docker rm vue-expenses-project || true
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${GITHUB_REF##*/}
+            docker run -d --name vue-expenses-project -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${GITHUB_REF##*/}
+
+      - name: Verify
+        run: echo ${{ steps.docker_build.outputs.digest }}
