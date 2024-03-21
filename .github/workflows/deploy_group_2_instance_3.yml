@@ -61,7 +61,7 @@ jobs:
       - name: Deploy to EC2 instance
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_INSTANCE_1_HOST }}
+          host: ${{ secrets.EC2_INSTANCE_3_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_TESTING_PRIVATE_KEY }}
           script: |
