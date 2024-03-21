@@ -7,6 +7,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+env:
+  BRANCH_PATH: group-1-instance-2
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -52,20 +55,20 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${GITHUB_REF##*/}
-          build-args: VUE_APP_GIT_BRANCH=${GITHUB_REF##*/}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${{ env.BRANCH_PATH }}
+          build-args: VUE_APP_GIT_BRANCH=${{ env.BRANCH_PATH }}
 
       - name: Deploy to EC2 instance
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_INSTANCE_1_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          key: ${{ secrets.EC2_TESTING_PRIVATE_KEY }}
           script: |
             docker stop vue-expenses-project || true
             docker rm vue-expenses-project || true
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${GITHUB_REF##*/}
-            docker run -d --name vue-expenses-project -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${GITHUB_REF##*/}
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${{ env.BRANCH_PATH }}
+            docker run -d --name vue-expenses-project -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/vue-expenses-project:${{ env.BRANCH_PATH }}
 
       - name: Verify
         run: echo ${{ steps.docker_build.outputs.digest }}
