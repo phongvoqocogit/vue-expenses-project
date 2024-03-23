@@ -15,4 +15,13 @@ export default defineConfig({
     process.env.DEPLOY_GITHUB_PAGE === "GITHUB_PAGE"
       ? "/vue-expenses-project/"
       : "",
+  build: {
+    outDir: "dist",
+    rollupOptions: {
+      output: {
+        entryFileNames: "assets/index-JS.js",
+        assetFileNames: "assets/index-CSS.css",
+      },
+    },
+  },
 });
